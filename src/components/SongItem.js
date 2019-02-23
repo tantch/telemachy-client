@@ -8,9 +8,10 @@ class SongItem extends Component {
     newTagValue: "",
   };
 
-  saveNewTag= () => {
+  saveNewTag= (e) => {
     this.props.saveSong({...this.props.song, tags:[...this.props.song.tags,this.state.newTagValue]});
     this.setState({newTagValue: ""});
+    e.preventDefault();
   };
   deleteTag= (dTag) => {
     const tags = _.filter(this.props.song.tags,tag => tag !== dTag );
@@ -27,8 +28,10 @@ class SongItem extends Component {
           <div className="song__artist">{song.artist}</div>
           <div className="song__tags">
             {song.tags.map( tag => (<div className="tag tag--edit" onClick={ () => this.deleteTag(tag)}>{tag  +" x"}</div>))}
-            <input placeholder="new tag" value={this.state.newTagValue} onChange={(e) => this.setState({newTagValue: e.target.value})}/>
-            <button onClick={this.saveNewTag}> + </button>
+            <form onSubmit={e => this.saveNewTag(e)}>
+              <input placeholder="new tag" value={this.state.newTagValue} onChange={(e) => this.setState({newTagValue: e.target.value})}/>
+              <input type="submit" value="+" />
+            </form>
           </div>
         </div>
       );

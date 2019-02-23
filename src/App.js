@@ -39,6 +39,13 @@ class App extends Component {
       }
     }).then(res => console.log(res)).catch(e => console.log(e))
   }
+  createSpotifyPlaylist = (codes) => {
+    axios.post("http://localhost:5000/spotify/create_playlist",{musicCode: codes},{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => console.log(res)).catch(e => console.log(e))
+  }
 
   updateSong = (song) => {
     axios.put(`http://localhost:5000/songs/${song.id}`,{song},{
@@ -73,7 +80,7 @@ class App extends Component {
             <Route exact path="/" 
               component={() => <Home loadSpotify={this.loadSpotifySongs} />}
             />
-            <Route exact path="/songs" render={ () => <Songs songs={this.state.songs} saveSong={this.updateSong} playSongs={this.playSpotifySongs} getSongs={this.getSongs} />}/>
+            <Route exact path="/songs" render={ () => <Songs songs={this.state.songs} saveSong={this.updateSong} playSongs={this.playSpotifySongs} createPlaylist={this.createSpotifyPlaylist} getSongs={this.getSongs} />}/>
           </div>
         </Router>
       </div>

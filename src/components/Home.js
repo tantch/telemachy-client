@@ -10,7 +10,7 @@ class Home extends Component {
     return (
       <div>
         <a
-          href={"https://accounts.spotify.com/en/authorize/?client_id=fb72db22478a4db595b843f299c90fae&response_type=code&redirect_uri=" + uri + "&scope=user-read-private%20user-read-email%20user-library-read%20user-modify-playback-state&state=pedromrvc@gmail.com"}
+          href={"https://accounts.spotify.com/en/authorize/?client_id=fb72db22478a4db595b843f299c90fae&response_type=code&redirect_uri=" + uri + "&scope=user-read-private%20user-read-email%20user-library-read%20user-modify-playback-state%20playlist-modify-public%20playlist-modify-private&state=pedromrvc@gmail.com"}
         >
           spotify
         </a>

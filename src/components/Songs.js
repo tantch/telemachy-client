@@ -41,6 +41,7 @@ class Songs extends Component {
     return (
       <div className="songs-container">
         <button onClick={() => this.props.playSongs(songs.map(song => song.code))} >Play</button>
+        <button onClick={() => this.props.createPlaylist(songs.map(song => song.code))} >Create Playlist</button>
         <button onClick={() => this.setState(({edit}) => ({edit:!edit}))} >Edit</button>
         <form onSubmit={this.addTagFilter}>
           <input type="text" value={this.state.tagInput} onChange={(e) => this.setState({tagInput: e.target.value})}/>
