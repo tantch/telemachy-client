@@ -6,15 +6,16 @@ class Home extends Component {
   render() {
     const uri = encodeURIComponent(process.env.REACT_APP_SERVER_URI + "/spotify");
     console.log("uri ofr spotify",uri);
-
+    console.log("user email",this.props.user);
+    const email = this.props.user;
     return (
-      <div>
-        <a
-          href={"https://accounts.spotify.com/en/authorize/?client_id=fb72db22478a4db595b843f299c90fae&response_type=code&redirect_uri=" + uri + "&scope=user-read-private%20user-read-email%20user-library-read%20user-modify-playback-state%20playlist-modify-public%20playlist-modify-private&state=pedromrvc@gmail.com"}
+      <div className="home page">
+        <a className="text"
+          href={"https://accounts.spotify.com/en/authorize/?client_id=fb72db22478a4db595b843f299c90fae&response_type=code&redirect_uri=" + uri + "&scope=user-read-private%20user-read-email%20user-library-read%20user-modify-playback-state%20playlist-modify-public%20playlist-modify-private&state=" + email}
         >
-          spotify
+          Relog / Log into spotify
         </a>
-        <button onClick={this.props.loadSpotify}>load to server</button>
+        <button className="button" onClick={this.props.loadSpotify}>Load all spotify songs to server</button>
       </div>
     );
   }

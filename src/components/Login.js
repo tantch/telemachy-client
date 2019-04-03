@@ -23,11 +23,11 @@ class Login extends Component {
     }
 
     return (
-      <div className="login-page">
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" value={this.state.email} placeholder="email" onChange={e => this.setState({email:e.target.value})}/>
-          <input type="password" value={this.state.password} placeholder="password" onChange={e => this.setState({password:e.target.value})}/>
-          <input type="submit" value="Login" />
+      <div className="login page">
+        <form className="login__form" onSubmit={this.handleSubmit}>
+          <input className="input" type="text" value={this.state.email} placeholder="email" onChange={e => this.setState({email:e.target.value})}/>
+          <input className="input" type="password" value={this.state.password} placeholder="password" onChange={e => this.setState({password:e.target.value})}/>
+          <input className="button" type="submit" value="Login" />
         </form>
       </div>
     );

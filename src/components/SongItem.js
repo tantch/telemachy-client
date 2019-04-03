@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import _ from "lodash";
 
 
+const stringToColour = (str) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let colour = '#';
+    for (let i = 0; i < 3; i++) {
+        var value = (hash >> (i * 8)) & 0xFF;
+        colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+}
+
 class SongItem extends Component {
 
   state= {
@@ -40,7 +53,7 @@ class SongItem extends Component {
         <div className="song" key={song.id}>
           <div className="song__name">{song.name}</div>
           <div className="song__artist">{song.artist}</div>
-          <div className="song__tags">{song.tags.map( tag => (<div key={tag} className="tag">{tag}</div>))}</div>
+          <div className="song__tags">{song.tags.map( tag => (<div key={tag} style={{backgroundColor: stringToColour(tag)}} className="tag">{tag}</div>))}</div>
         </div>
       );
     }

@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import axios from "axios";
+import Cookies from 'js-cookie';
+
 import './App.css';
+
+import AuthedPage from "./wrappers/AuthedPage";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Songs from "./components/Songs";
 import Login from "./components/Login";
-import AuthedPage from "./wrappers/AuthedPage";
-import axios from "axios";
-import Cookies from 'js-cookie'
+import Tasks from "./components/Tasks";
 
 const getAccessToken = () => Cookies.get('access_token')
 
@@ -15,13 +18,16 @@ class App extends Component {
 
   state = {
     auth: "",
+    user: "",
+    songs: [],
+    tasks: [],
   };
 
 
   checkSavedAuth = () => {
     const token  = getAccessToken();
     if(!!token){
-      this.setState({auth: token},this.getSongs);
+      this.setState({auth: token},() => {this.getUserInfo();this.getSongs();this.getTasks()});
     }
   }
 
@@ -32,11 +38,20 @@ class App extends Component {
         password: password
       }
     }).then( res => {
-      this.setState({auth: res.headers.authorization});
+      this.setState({auth: res.headers.authorization,user: email});
       const inOneHour = new Date(new Date().getTime() + 60*60*1000)
       Cookies.set('access_token', res.headers.authorization, { expires: inOneHour })
       this.getSongs();
+      this.getTasks();
     }).catch(e => console.log(e));
+  }
+
+  getUserInfo = () => {
+    axios.get(`${process.env.REACT_APP_SERVER_URI}/me`,{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => this.setState({user: res.data})).catch(e => console.log(e))
   }
 
   loadSpotifySongs = () => {
@@ -70,6 +85,22 @@ class App extends Component {
     }).then(res => this.getSongs()).catch(e => console.log(e));
   }
 
+  updateTask = (task) => {
+    axios.put(`${process.env.REACT_APP_SERVER_URI}/tasks/${task.id}`,{task},{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => this.getTasks()).catch(e => console.log(e));
+  }
+
+  createTask = (task) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URI}/tasks/`,{task},{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => this.getTasks()).catch(e => console.log(e));
+  }
+
   getSongs= () => {
     axios.get(`${process.env.REACT_APP_SERVER_URI}/songs`,{
       headers: {
@@ -78,6 +109,17 @@ class App extends Component {
     }).then(res => {
       const songs = res.data.map( song => ({...song, tags: song.tags.map(tag => tag.name)}));
       this.setState({songs});
+    }).catch(e => console.log(e))
+  }
+
+  getTasks= () => {
+    axios.get(`${process.env.REACT_APP_SERVER_URI}/tasks`,{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => {
+      const tasks = res.data;
+      this.setState({tasks});
     }).catch(e => console.log(e))
   }
 
@@ -99,7 +141,7 @@ class App extends Component {
               path="/" 
               component={ () => 
                   <AuthedPage auth={this.state.auth} >
-                    <Home loadSpotify={this.loadSpotifySongs} />
+                    <Home loadSpotify={this.loadSpotifySongs} user={this.state.user} />
                   </AuthedPage>
               }
             />
@@ -112,6 +154,15 @@ class App extends Component {
               render={ () =>
                   <AuthedPage auth={this.state.auth} >
                     <Songs songs={this.state.songs} saveSong={this.updateSong} playSongs={this.playSpotifySongs} createPlaylist={this.createSpotifyPlaylist} getSongs={this.getSongs} />
+                </AuthedPage>
+              }
+            />
+            <Route
+              exact
+              path="/tasks"
+              render={ () =>
+                  <AuthedPage auth={this.state.auth} >
+                    <Tasks tasks={this.state.tasks} createTask={this.createTask} saveTask={this.updateTask} getTasks={this.getTasks} />
                 </AuthedPage>
               }
             />
