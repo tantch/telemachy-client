@@ -56,6 +56,7 @@ class Songs extends Component {
         <div className="songs__actions">
           <button className="button" onClick={() => this.props.playSongs(songs.map(song => song.code))} >Play</button>
           <button className="button" onClick={() => this.props.createPlaylist(songs.map(song => song.code))} >Create Playlist</button>
+          <button className="button" onClick={() => this.props.createDancingPlaylist(songs.map(song => song.code))} >Create Dancing Playlist</button>
           <button className="button" onClick={() => this.setState(({edit}) => ({edit:!edit}))} >Edit</button>
         </div>
         <div className="songs__filters">

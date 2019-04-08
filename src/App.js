@@ -77,6 +77,14 @@ class App extends Component {
     }).then(res => console.log(res)).catch(e => console.log(e))
   }
 
+  createDancingSpotifyPlaylist = (codes) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URI}/spotify/create_dancing_playlist`,{musicCode: codes},{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => console.log(res)).catch(e => console.log(e))
+  }
+
   updateSong = (song) => {
     axios.put(`${process.env.REACT_APP_SERVER_URI}/songs/${song.id}`,{song},{
       headers: {
@@ -153,7 +161,7 @@ class App extends Component {
               path="/songs"
               render={ () =>
                   <AuthedPage auth={this.state.auth} >
-                    <Songs songs={this.state.songs} saveSong={this.updateSong} playSongs={this.playSpotifySongs} createPlaylist={this.createSpotifyPlaylist} getSongs={this.getSongs} />
+                    <Songs songs={this.state.songs} saveSong={this.updateSong} playSongs={this.playSpotifySongs} createDancingPlaylist={this.createDancingSpotifyPlaylist} createPlaylist={this.createSpotifyPlaylist} getSongs={this.getSongs} />
                 </AuthedPage>
               }
             />

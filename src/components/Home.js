@@ -11,7 +11,7 @@ class Home extends Component {
     return (
       <div className="home page">
         <a className="text"
-          href={"https://accounts.spotify.com/en/authorize/?client_id=fb72db22478a4db595b843f299c90fae&response_type=code&redirect_uri=" + uri + "&scope=user-read-private%20user-read-email%20user-library-read%20user-modify-playback-state%20playlist-modify-public%20playlist-modify-private&state=" + email}
+          href={"https://accounts.spotify.com/en/authorize/?client_id=fb72db22478a4db595b843f299c90fae&response_type=code&redirect_uri=" + uri + "&scope=user-read-private%20user-read-email%20user-library-read%20user-modify-playback-state%20playlist-modify-public%20playlist-modify-private%20user-read-playback-state%20user-top-read%20user-read-currently-playing&state=" + email}
         >
           Relog / Log into spotify
         </a>
