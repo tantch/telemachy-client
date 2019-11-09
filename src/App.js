@@ -27,7 +27,7 @@ class App extends Component {
   checkSavedAuth = () => {
     const token  = getAccessToken();
     if(!!token){
-      this.setState({auth: token},() => {this.getUserInfo();this.getSongs();this.getTasks()});
+      this.setState({auth: token},() => {this.getUserInfo();this.getSongs();this.getTasks();this.getPlaylists()});
     }
   }
 
@@ -42,6 +42,7 @@ class App extends Component {
       const inOneHour = new Date(new Date().getTime() + 60*60*1000)
       Cookies.set('access_token', res.headers.authorization, { expires: inOneHour })
       this.getSongs();
+      this.getPlaylists();
       this.getTasks();
     }).catch(e => console.log(e));
   }
@@ -86,7 +87,7 @@ class App extends Component {
   }
 
   updateSong = (song) => {
-    axios.put(`${process.env.REACT_APP_SERVER_URI}/songs/${song.id}`,{song},{
+    axios.put(`${process.env.REACT_APP_SERVER_URI}/library_songs/${song.id}`,{library_song: song},{
       headers: {
         authorization: this.state.auth
       }
@@ -109,14 +110,33 @@ class App extends Component {
     }).then(res => this.getTasks()).catch(e => console.log(e));
   }
 
+  createTaskEvent = (task_id,task_event) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URI}/tasks/${task_id}/task_events`,{task_event},{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => console.log(res)).catch(e => console.log(e));
+  }
+
   getSongs= () => {
-    axios.get(`${process.env.REACT_APP_SERVER_URI}/songs`,{
+    axios.get(`${process.env.REACT_APP_SERVER_URI}/library_songs`,{
       headers: {
         authorization: this.state.auth
       }
     }).then(res => {
       const songs = res.data.map( song => ({...song, tags: song.tags.map(tag => tag.name)}));
       this.setState({songs});
+    }).catch(e => console.log(e))
+  }
+
+  getPlaylists= () => {
+    axios.get(`${process.env.REACT_APP_SERVER_URI}/spotify/playlists`,{
+      headers: {
+        authorization: this.state.auth
+      }
+    }).then(res => {
+      const playlists = res.data.map( pl => ({ collaborative: pl.collaborative, id: pl.id, name: pl.name, public: pl.public, tracks: pl.tracks.href }));
+      this.setState({playlists});
     }).catch(e => console.log(e))
   }
 
@@ -153,7 +173,9 @@ class App extends Component {
                   </AuthedPage>
               }
             />
-            <Route exact path="/login" 
+            <Route
+              exact
+              path="/login" 
               component={() => <Login login={this.login} auth={this.state.auth}/>}
             />
             <Route
@@ -161,7 +183,15 @@ class App extends Component {
               path="/songs"
               render={ () =>
                   <AuthedPage auth={this.state.auth} >
-                    <Songs songs={this.state.songs} saveSong={this.updateSong} playSongs={this.playSpotifySongs} createDancingPlaylist={this.createDancingSpotifyPlaylist} createPlaylist={this.createSpotifyPlaylist} getSongs={this.getSongs} />
+                    <Songs
+                      songs={this.state.songs}
+                      playlists={this.state.playlists}
+                      saveSong={this.updateSong}
+                      playSongs={this.playSpotifySongs}
+                      createDancingPlaylist={this.createDancingSpotifyPlaylist}
+                      createPlaylist={this.createSpotifyPlaylist}
+                      getSongs={this.getSongs}
+                    />
                 </AuthedPage>
               }
             />
@@ -170,7 +200,13 @@ class App extends Component {
               path="/tasks"
               render={ () =>
                   <AuthedPage auth={this.state.auth} >
-                    <Tasks tasks={this.state.tasks} createTask={this.createTask} saveTask={this.updateTask} getTasks={this.getTasks} />
+                    <Tasks
+                      tasks={this.state.tasks}
+                      createTask={this.createTask}
+                      createTaskEvent={this.createTaskEvent}
+                      saveTask={this.updateTask}
+                      getTasks={this.getTasks}
+                    />
                 </AuthedPage>
               }
             />

@@ -52,22 +52,27 @@ class Songs extends Component {
     const songs = this.filterSongs();
     console.log(songs);
     return (
-      <div className="songs page">
-        <div className="songs__actions">
-          <button className="button" onClick={() => this.props.playSongs(songs.map(song => song.code))} >Play</button>
-          <button className="button" onClick={() => this.props.createPlaylist(songs.map(song => song.code))} >Create Playlist</button>
-          <button className="button" onClick={() => this.props.createDancingPlaylist(songs.map(song => song.code))} >Create Dancing Playlist</button>
-          <button className="button" onClick={() => this.setState(({edit}) => ({edit:!edit}))} >Edit</button>
+      <div className="music page">
+        <div className="playlists">
+          {this.props.playlists.map( o => <div>{o.name}</div> )}
         </div>
-        <div className="songs__filters">
-          <form onSubmit={this.addTagFilter}>
-            <input className="input" placeholder="enter tag name" type="text" value={this.state.tagInput} onChange={(e) => this.setState({tagInput: e.target.value})}/>
-            <input className="button" type="submit" value="Filter"/>
-          </form>
-          <div className="songs__filters__tags">{this.state.tags.map(tag => <div className="tag" key={tag} style={{backgroundColor: stringToColour(tag)}} onClick={() => this.removeTagFilter(tag)}>{tag + "   x"}</div>)}</div>
-        </div>
-        <div className="songs__container">
-          {songs.map( (song,i) => <SongItem key={song.id} song={song} saveSong={(svSong) => this.saveSong(svSong)} edit={this.state.edit}/> )}
+        <div className="songs">
+          <div className="songs__actions">
+            <button className="button" onClick={() => this.props.playSongs(songs.map(songItem => songItem.song.code))} >Play</button>
+            <button className="button" onClick={() => this.props.createPlaylist(songs.map(songItem => songItem.song.code))} >Create Playlist</button>
+            {/*<button className="button" onClick={() => this.props.createDancingPlaylist(songs.map(song => song.code))} >Create Dancing Playlist</button>*/}
+            <button className="button" onClick={() => this.setState(({edit}) => ({edit:!edit}))} >Edit</button>
+          </div>
+          <div className="songs__filters">
+            <form onSubmit={this.addTagFilter}>
+              <input className="input" placeholder="enter tag name" type="text" value={this.state.tagInput} onChange={(e) => this.setState({tagInput: e.target.value})}/>
+              <input className="button" type="submit" value="Filter"/>
+            </form>
+            <div className="songs__filters__tags">{this.state.tags.map(tag => <div className="tag" key={tag} style={{backgroundColor: stringToColour(tag)}} onClick={() => this.removeTagFilter(tag)}>{tag + "   x"}</div>)}</div>
+          </div>
+          <div className="songs__container">
+            {songs.map( (song,i) => <SongItem key={song.id} song={song} saveSong={(svSong) => this.saveSong(svSong)} edit={this.state.edit}/> )}
+          </div>
         </div>
       </div>
     );

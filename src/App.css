@@ -105,7 +105,12 @@ a.text:hover {
 }
 
 /* songs */
+.music.page {
+  flex-direction: row;
+}
 .songs{
+  display:flex;
+  flex-direction:column;
   padding: 5px 20px 0px 20px;
 }
 
@@ -166,5 +171,14 @@ a.text:hover {
 .song > .song__tags {
   display: flex;
   flex-direction: row;
+}
 
+.task {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr 90px;
+}
+.task > * {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
