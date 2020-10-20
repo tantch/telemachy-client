@@ -3,6 +3,11 @@ import React, { Component } from 'react';
 
 class Home extends Component {
 
+  state = {
+    a1: "",
+    a2: ""
+  }
+
   render() {
     const uri = encodeURIComponent(process.env.REACT_APP_SERVER_URI + "/spotify");
     console.log("uri ofr spotify",uri);
@@ -16,6 +21,11 @@ class Home extends Component {
           Relog / Log into spotify
         </a>
         <button className="button" onClick={this.props.loadSpotify}>Load all spotify songs to server</button>
+        <div>
+          <input value={this.state.a1} onChange={(e) => this.setState({a1: e.target.value})} />
+          <input value={this.state.a2} onChange={(e) => this.setState({a2: e.target.value})} />
+          <button className="button" onClick={() => this.props.battle(this.state.a1,this.state.a2)}>test battle</button>
+        </div>
       </div>
     );
   }

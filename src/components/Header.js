@@ -11,8 +11,8 @@ class HeaderComp extends Component {
     return (
       <div className="header">
         <Link className={path === "/" ? "header__link header__link--active" : "header__link"} to="/" >Home</Link>
+        <Link className={path === "/albums" ? "header__link header__link--active" : "header__link"} to="/albums" >Albums</Link>
         <Link className={path === "/songs" ? "header__link header__link--active" : "header__link"} to="/songs" >Songs</Link>
-        <Link className={path === "/tasks" ? "header__link header__link--active" : "header__link"} to="/tasks" >Tasks</Link>
       </div>
     );
   }

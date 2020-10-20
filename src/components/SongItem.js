@@ -38,8 +38,7 @@ class SongItem extends Component {
     if(this.props.edit){
       return (
         <div className="song" key={songItem.id}>
-          <div className="song__name">{songItem.song.name}</div>
-          <div className="song__artist">{songItem.song.artist}</div>
+          <div className="song__name">{songItem.name}</div>
           <div className="song__tags">
             {songItem.tags.map( tag => (<div className="tag tag--edit" onClick={ () => this.deleteTag(tag)}>{tag  +" x"}</div>))}
             <form onSubmit={e => this.saveNewTag(e)}>
@@ -52,8 +51,7 @@ class SongItem extends Component {
     }else{
       return (
         <div className="song" key={songItem.id}>
-          <div className="song__name">{songItem.song.name}</div>
-          <div className="song__artist">{songItem.song.artist}</div>
+          <div className="song__name">{songItem.name}</div>
           <div className="song__tags">{songItem.tags.map( tag => (<div key={tag} style={{backgroundColor: stringToColour(tag)}} className="tag">{tag}</div>))}</div>
         </div>
       );
